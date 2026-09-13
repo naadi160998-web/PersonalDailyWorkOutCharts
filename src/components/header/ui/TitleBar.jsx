@@ -4,7 +4,7 @@ const TitleBar = () => {
     const date = new Date();
     const fullDate = `${date.getDate()}:${date.getMonth() < 10 ? 0 : ""}${date.getMonth()+1}:${date.getFullYear()}`
     const weatherTime = date.getHours()
-    console.log("date:",weatherTime);
+    
     const greetingTime = () =>{
         if(weatherTime >= 4 && weatherTime < 12){
             return "Good Morning"

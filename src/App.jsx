@@ -1,7 +1,8 @@
-import { Box, Flex, Section } from '@radix-ui/themes'
+import { Box, Button, Container, Flex, Section } from '@radix-ui/themes'
 import './App.css'
 import Header from './components/header/Header'
 import Footer from './components/Footer/Footer';
+import { useState } from 'react';
 
 const workouts = [
   {
@@ -48,16 +49,41 @@ const workouts = [
   },
 ]
 
+const weakDays = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
+
 function App() {
   const date = new Date();
   const weakDay = date.toString().split(" ")[0]
+  const imgSrcArr = workouts.filter((e)=>e.day.includes(weakDay))
+  const [imgSrc,setImgSrc] = useState(imgSrcArr)
 
-  const imgSrc = workouts.filter((e)=>e.day.includes(weakDay))
+  const handleChangeDay = (n)=>{
+    if(n<0){
+      setImgSrc(workouts.filter((e)=>e.day.includes(weakDays[6])))
+    }else if(n>0){
+      setImgSrc(workouts.filter((e)=>e.day === weakDays[date.getDay()+1]))
+    }else{
+      setImgSrc(workouts.filter((e)=>e.day === weakDays[date.getDay()]))
+    }
+  }
   
   return (
     <>
       <Section p="1">
           <Header />
+          <Container>
+            <Box>
+            <Flex
+              align="start"
+              justify="between"
+              gap="3"
+            >
+              <Button color="orange" onClick={()=>handleChangeDay(-1)}>YesterDay</Button>
+              <Button color="cyan" onClick={()=>handleChangeDay(0)}>Today</Button>
+              <Button color="grass" onClick={()=>handleChangeDay(1)}>Tomorrow</Button>
+            </Flex>
+          </Box>
+          </Container>
           <Flex align="center" justify="center" style={{
             width:"100%",
             height:"max-content"
@@ -65,7 +91,7 @@ function App() {
             <Box mt="5" mb="5">
             {
               imgSrc.map((e,i)=>(
-                <img key={i} src={e.day === weakDay ? `${e.url}` : ""} alt="" style={{
+                <img key={i} src={e.url} alt="" style={{
                   width:"300px",
                   height:"500px"
                 }}/>
